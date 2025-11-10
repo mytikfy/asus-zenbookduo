@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="100">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <itemPath>azbduobt.cc</itemPath>
+      <itemPath>azbduobt.h</itemPath>
+      <itemPath>btraw.cc</itemPath>
+      <itemPath>btraw.h</itemPath>
+      <itemPath>main.cc</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>../../.drone.yml</itemPath>
+      <itemPath>.gitignore</itemPath>
+      <itemPath>Makefile</itemPath>
+      <itemPath>../../Readme.md</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>true</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <architecture>2</architecture>
+          <standard>10</standard>
+          <commandLine>`pkg-config --cflags glib-2.0` -W -Wshadow -Wall</commandLine>
+          <warningLevel>2</warningLevel>
+        </cTool>
+        <ccTool>
+          <architecture>2</architecture>
+          <standard>11</standard>
+          <commandLine>`pkg-config --cflags glib-2.0` `pkg-config --cflags dbus-1` -W -Wshadow -Wall 
+</commandLine>
+          <warningLevel>2</warningLevel>
+        </ccTool>
+        <asmTool>
+          <architecture>2</architecture>
+          <warningLevel>2</warningLevel>
+        </asmTool>
+        <linkerTool>
+          <linkerLibItems>
+            <linkerOptionItem>`pkg-config --libs libusb-1.0`</linkerOptionItem>
+            <linkerOptionItem>`pkg-config --libs glib-2.0`</linkerOptionItem>
+            <linkerOptionItem>`pkg-config --libs gio-2.0` </linkerOptionItem>
+            <linkerOptionItem>`pkg-config --libs dbus-1`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </compileType>
+      <item path="azbduobt.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="azbduobt.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="btraw.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="btraw.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main.cc" ex="false" tool="1" flavor2="0">
+      </item>
+    </conf>
+    <conf name="binkyDebug" type="1">
+      <toolsSet>
+        <compilerSet>GNU|GNU</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>true</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <architecture>2</architecture>
+          <standard>10</standard>
+          <commandLine>`pkg-config --cflags glib-2.0`  -ffunction-sections  -fdata-sections -pedantic -Wall -fsanitize=undefined -Wsuggest-override</commandLine>
+          <warningLevel>2</warningLevel>
+        </cTool>
+        <ccTool>
+          <architecture>2</architecture>
+          <standard>11</standard>
+          <commandLine>`pkg-config --cflags glib-2.0` `pkg-config --cflags dbus-1` -ffunction-sections -fdata-sections -pedantic -Wall -fsanitize=undefined -Wsuggest-override</commandLine>
+          <warningLevel>2</warningLevel>
+        </ccTool>
+        <asmTool>
+          <architecture>2</architecture>
+          <warningLevel>2</warningLevel>
+        </asmTool>
+        <linkerTool>
+          <linkerLibItems>
+            <linkerOptionItem>`pkg-config --libs libusb-1.0`</linkerOptionItem>
+            <linkerOptionItem>`pkg-config --libs glib-2.0`</linkerOptionItem>
+            <linkerOptionItem>`pkg-config --libs gio-2.0`</linkerOptionItem>
+            <linkerOptionItem>`pkg-config --libs dbus-1`</linkerOptionItem>
+          </linkerLibItems>
+          <commandLine>-ffunction-sections -fdata-sections -fsanitize=undefined</commandLine>
+        </linkerTool>
+      </compileType>
+      <item path="azbduobt.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="azbduobt.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="btraw.cc" ex="false" tool="1" flavor2="9">
+      </item>
+      <item path="btraw.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main.cc" ex="false" tool="1" flavor2="9">
+      </item>
+    </conf>
+    <conf name="Release" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>true</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>6</developmentMode>
+          <stripSymbols>true</stripSymbols>
+          <architecture>2</architecture>
+          <commandLine>`pkg-config --cflags glib-2.0` -W -Wshadow -Wall</commandLine>
+          <warningLevel>2</warningLevel>
+        </cTool>
+        <ccTool>
+          <developmentMode>6</developmentMode>
+          <stripSymbols>true</stripSymbols>
+          <architecture>2</architecture>
+          <standard>11</standard>
+          <commandLine>`pkg-config --cflags glib-2.0` `pkg-config --cflags dbus-1` -W -Wshadow -Wall 
+</commandLine>
+          <warningLevel>2</warningLevel>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>6</developmentMode>
+          <architecture>2</architecture>
+          <warningLevel>2</warningLevel>
+        </asmTool>
+        <linkerTool>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/azbduokbdbacklight</output>
+          <stripSymbols>true</stripSymbols>
+          <linkerLibItems>
+            <linkerOptionItem>`pkg-config --libs libusb-1.0`</linkerOptionItem>
+            <linkerOptionItem>`pkg-config --libs glib-2.0`</linkerOptionItem>
+            <linkerOptionItem>`pkg-config --libs gio-2.0`</linkerOptionItem>
+            <linkerOptionItem>`pkg-config --libs dbus-1`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </compileType>
+      <item path="azbduobt.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="azbduobt.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="btraw.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="btraw.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main.cc" ex="false" tool="1" flavor2="0">
+      </item>
+    </conf>
+    <conf name="binkyRelease" type="1">
+      <toolsSet>
+        <compilerSet>GNU|GNU</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>true</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>6</developmentMode>
+          <stripSymbols>true</stripSymbols>
+          <architecture>2</architecture>
+          <commandLine>`pkg-config --cflags glib-2.0` -W -Wshadow -Wall</commandLine>
+          <warningLevel>2</warningLevel>
+        </cTool>
+        <ccTool>
+          <developmentMode>6</developmentMode>
+          <stripSymbols>true</stripSymbols>
+          <architecture>2</architecture>
+          <standard>11</standard>
+          <commandLine>`pkg-config --cflags glib-2.0` `pkg-config --cflags dbus-1` -W -Wshadow -Wall 
+</commandLine>
+          <warningLevel>2</warningLevel>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>6</developmentMode>
+          <architecture>2</architecture>
+          <warningLevel>2</warningLevel>
+        </asmTool>
+        <linkerTool>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/azbduokbdbacklight</output>
+          <stripSymbols>true</stripSymbols>
+          <linkerLibItems>
+            <linkerOptionItem>`pkg-config --libs libusb-1.0`</linkerOptionItem>
+            <linkerOptionItem>`pkg-config --libs glib-2.0`</linkerOptionItem>
+            <linkerOptionItem>`pkg-config --libs gio-2.0`</linkerOptionItem>
+            <linkerOptionItem>`pkg-config --libs dbus-1`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </compileType>
+      <item path="azbduobt.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="azbduobt.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="btraw.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="btraw.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main.cc" ex="false" tool="1" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
