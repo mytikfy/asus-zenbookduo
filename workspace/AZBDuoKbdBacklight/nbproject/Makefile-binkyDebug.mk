@@ -44,8 +44,10 @@ OBJECTFILES= \
 CFLAGS=-m64 `pkg-config --cflags glib-2.0`  -ffunction-sections  -fdata-sections -pedantic -Wall -fsanitize=undefined -Wsuggest-override 
 
 # CC Compiler Flags
-CCFLAGS=-m64 `pkg-config --cflags glib-2.0` `pkg-config --cflags dbus-1` -ffunction-sections -fdata-sections -pedantic -Wall -fsanitize=undefined -Wsuggest-override 
-CXXFLAGS=-m64 `pkg-config --cflags glib-2.0` `pkg-config --cflags dbus-1` -ffunction-sections -fdata-sections -pedantic -Wall -fsanitize=undefined -Wsuggest-override 
+CCFLAGS=-m64 `pkg-config --cflags glib-2.0` `pkg-config --cflags dbus-1` -W -Wshadow -Wall -Wextra -ffunction-sections -fdata-sections -fsanitize=undefined -Wsuggest-override
+ 
+CXXFLAGS=-m64 `pkg-config --cflags glib-2.0` `pkg-config --cflags dbus-1` -W -Wshadow -Wall -Wextra -ffunction-sections -fdata-sections -fsanitize=undefined -Wsuggest-override
+ 
 
 # Fortran Compiler Flags
 FFLAGS=

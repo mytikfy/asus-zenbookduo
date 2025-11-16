@@ -1,4 +1,3 @@
-
  /*
  * based on:
  * https://github.com/wcbonner/BlueZ-DBus/blob/master/bluez-dbus.cpp
@@ -167,15 +166,15 @@ int BtRaw::list()
 {
     GError *error = nullptr;
     GVariant *result = g_dbus_connection_call_sync(m_connection,
-            "org.bluez",                   /* Bus name of the BlueZ service */
-            "/",					//  "/org/bluez/hci0/dev_DA_88_5F_79_04_F1",             /* Object path of the adapter */
-            "org.freedesktop.DBus.ObjectManager", /* Interface name */
-            "GetManagedObjects",                         /* Method name */
-            nullptr, // g_variant_new("(ss)", par1.c_str(),  par2.c_str()), //  "org.bluez.Device1", "Name"), /* Parameters */
-            G_VARIANT_TYPE("(a{oa{sa{sv}}})"),         /* Expected return type */
+            "org.bluez",												/* Bus name of the BlueZ service */
+            "/",														/* Object path of the adapter */
+            "org.freedesktop.DBus.ObjectManager",						/* Interface name */
+            "GetManagedObjects",										/* Method name */
+            nullptr,													/* Parameters */
+            G_VARIANT_TYPE("(a{oa{sa{sv}}})"),							/* Expected return type */
             G_DBUS_CALL_FLAGS_NONE,
-            -1,                            /* Default timeout */
-            NULL,                          /* GCancellable */
+            -1,															/* Default timeout */
+            NULL,														/* GCancellable */
             &error);
 
     if (error) {
@@ -229,8 +228,12 @@ BtRaw::BtInfo *BtRaw::find(int mode, const std::string& search)
 	return nullptr;
 }
 
-int BtRaw::collect()
+int BtRaw::collect(bool refresh)
 {
+	if ((!m_btinfos.empty()) && refresh) {
+		m_btinfos.clear();
+	}
+
 	int cflags = 0;
     GError *error = nullptr;
     GVariant *result;
@@ -820,3 +823,7 @@ int BtRaw::write(const char *characteristic, const std::vector<guint8>& data)
 	return 0;
 }
 
+bool BtRaw::isConnected()
+{
+	return false;
+}

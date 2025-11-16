@@ -16,8 +16,14 @@ class AzbDuoBt : public BtRaw
 		BtInfo *findKeyboard();
 		int setKbdBacklight(int value);
 
+		bool isConnected() override;
+
+	private:
+		void getKeyboard(bool force = false);
+
 	private:
 		std::string m_kbdname = "ASUS Zenbook Duo Keyboard";
+		BtRaw::BtInfo *m_keyboard = nullptr;
 };
 
 

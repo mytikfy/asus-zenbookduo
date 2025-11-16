@@ -13,6 +13,7 @@
 #include <string>
 
 #include "azbduobt.h"
+#include "version.h"
 
 using namespace std;
 
@@ -108,9 +109,11 @@ using namespace std;
 typedef struct {
 	int level = 3;
 	bool hotplugActive = false;
-	bool plugState = false;
+	bool pluggedInState = false;
 	bool dpmsSentinel = true;
 	bool btkbdLights = false;
+	bool btkbdLost = false;
+	bool sigusr2 = false;
 } CallbackData;
 
 static CallbackData cbData = {};
@@ -123,14 +126,9 @@ static int LIBUSB_CALL cb(libusb_context *ctx, libusb_device *device, libusb_hot
 
 	CallbackData *_cbData = (CallbackData *)user_data;
 	_cbData->hotplugActive = true;
-	_cbData->plugState = event == LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED ? true : false;
+	_cbData->pluggedInState = event == LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED ? true : false;
 
 	return 0;
-}
-
-void updateKbdBacklight(int level)
-{
-	(void) level;
 }
 
 static void updateUsbKbdBacklight(libusb_context *ctx, int level)
@@ -192,7 +190,7 @@ static int checkDPMS(const char *card)
 				static int lastReaded = -1;
 
 				if (lastReaded != readed) {
-					printf("readed = %d %s", readed, buf);
+					printf("dpms = %d %s", readed, buf);
 					lastReaded = readed;
 				}
 			}
@@ -229,6 +227,7 @@ static int checkPogo(const char *card)
 			return -1;
 		}
 
+
 		::fwrite("0x00050051", sizeof(char), 10, fhd);
 
 		::fclose(fhd);
@@ -256,13 +255,13 @@ static int checkPogo(const char *card)
 			return -1;
 		}
 
-		printf("buffer %d %s", readed, buffer);
+		printf("pogo %d, %s", readed, buffer);
 
 		static const char *sep = "= ";
 		char *tok = strtok(buffer, sep);
 
 		while (tok) {
-			printf("-- %s\n", tok);
+//			printf("-- %s\n", tok);
 
 			if (strncmp(tok, "DSTS", 4)) {
 				int value = ::stol(tok, nullptr, 16);
@@ -276,7 +275,7 @@ static int checkPogo(const char *card)
 	return -1;
 }
 
-int main2(void)
+static int worker(long timeout)
 {
 	if (!libusb_has_capability(LIBUSB_CAP_HAS_HOTPLUG)) {
 		printf("no hotplug support\n");
@@ -305,7 +304,13 @@ int main2(void)
 
 	struct timeval tv = {};
 	tv.tv_sec = 0;
-	tv.tv_usec = 250 * 1000;
+	tv.tv_usec = timeout * 1000;
+
+	if (tv.tv_usec >= 1000 * 1000) {
+		tv.tv_sec = tv.tv_usec / 1000 / 1000;
+		tv.tv_usec -= tv.tv_sec * 1000 * 1000;
+	}
+
 	int completed = 0;
 
 	AzbDuoBt bt;
@@ -318,7 +323,7 @@ int main2(void)
 
 		// https://github.com/libusb/libusb/issues/408
 		if (cbData.hotplugActive) {
-			if (cbData.plugState) {
+			if (cbData.pluggedInState) {
 				updateUsbKbdBacklight(ctx, cbData.level);
 
 				{
@@ -344,11 +349,18 @@ int main2(void)
 			cbData.hotplugActive = false;
 		}
 
-		if (!cbData.plugState) {
+		if (!cbData.pluggedInState) {
 			// set by bluetooth
 			if (!cbData.btkbdLights) {
 				if (!bt.setKbdBacklight(cbData.level)) {
+					printf("bt on\n");
 					cbData.btkbdLights = true;
+				}
+			}
+			else {
+				if (!bt.isConnected()) {
+					printf("bt off\n");
+					cbData.btkbdLights = false;
 				}
 			}
 		}
@@ -373,7 +385,7 @@ int main2(void)
 	return 0;
 }
 
-void sighdl(int sig)
+static void sighdl(int sig)
 {
 	if (sig == SIGUSR1) {
 		cbData.level++;
@@ -384,13 +396,15 @@ void sighdl(int sig)
 
 		cbData.hotplugActive = true;
 	}
+	else if (sig == SIGUSR2) {
+		cbData.sigusr2 = true;
+	}
 }
-
-extern int newmain(int argc, char** argv);
 
 int main(int argc, char** argv)
 {
 	bool daemon = false;
+	long timeout = 1000;
 
 	for (int i = 1; i < argc; i++) {
 		if (!strncmp("--level", argv[i], 7)) {
@@ -404,9 +418,24 @@ int main(int argc, char** argv)
 		else if (!strncmp("--daemon", argv[i], 8)) {
 			daemon = true;
 		}
+		else if (!strncmp("--timeout", argv[i], 9)) {
+			i++;
+
+			if ((i >= argc) || (argv[i][0] == '-')) {
+				fprintf(stderr, "missing parameter for timeout\n");
+				exit(1);
+			}
+
+			timeout = ::atol(argv[i]);
+		}
+		else if ((!strncmp("--version", argv[i], 9)) || (!strncmp("-v", argv[i], 2))) {
+			printf("version : %d,%d\n", version, revision);
+			return 0;
+		}
 	}
 
 	signal(SIGUSR1, &sighdl);
+	signal(SIGUSR2, &sighdl);
 	signal(SIGCHLD, SIG_IGN);
     signal(SIGHUP, SIG_IGN);
 
@@ -427,5 +456,5 @@ int main(int argc, char** argv)
 		}
 	}
 
-	return main2();
+	return worker(timeout);
 }

@@ -57,9 +57,10 @@ class BtRaw
 		bool open();
 		void close();
 		int list();
-		int collect();
+		int collect(bool refresh);
 		BtInfo *find(int mode, const std::string& search);
 		void tree();
+		virtual bool isConnected() = 0;
 
 		int write(const char *characteristic, const std::vector<guint8>& data);
 

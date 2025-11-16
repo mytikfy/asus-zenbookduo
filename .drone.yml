@@ -1,0 +1,12 @@
+---
+kind: pipeline
+type: docker
+name: default
+
+steps:
+- name: AZDuoKbdBacklight
+  image: build:20240709
+  commands:
+  - CPUS=`nproc`    
+  - ( cd workspace/AZBDuoKbdBacklight  && /usr/bin/make -j $CPUS -f Makefile CONF=Debug QMAKE=/usr/bin/qmake )
+ 
