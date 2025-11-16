@@ -1,4 +1,7 @@
 
+#ifndef AZBDUOBT_H
+#define AZBDUOBT_H
+
 #include <string>
 
 #include "btraw.h"
@@ -17,4 +20,7 @@ class AzbDuoBt : public BtRaw
 		std::string m_kbdname = "ASUS Zenbook Duo Keyboard";
 };
 
+
+
+#endif	// AZBDUOBT_H
 
