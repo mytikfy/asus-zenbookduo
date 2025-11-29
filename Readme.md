@@ -2,6 +2,10 @@
 
 ## ASUS Zenbook Duo UX8406CA-PZ068X 
 
+### Location
+
+[Github](https://github.com/mytikfy/asus-zenbookduo)
+
 ### Status
 
 <table border="1">
@@ -13,7 +17,7 @@
 </table>
 
 ### Roadmap
-  - correct lower touch display	 
+  - correct lower touch display
   - observe operation
     - SIGUSR1 not working with bluetooth
 
@@ -22,16 +26,17 @@
 (start it as root)
 
 ```
-  --level <num>			set level (0-3)
-  --daemon				start as daemon
-  --nodpms				don't check for screen blanking
-  --timeout <number>	wakeup timeout in ms
-  --version				just show the version and quit (shorthand: -v)
+  --level <num>         set level (0-3)
+  --daemon              start as daemon
+  --nodpms              don't check for screen blanking
+  --timeout <number>    wakeup timeout every <number> in ms
+  --timetics <number>   run for <number> seconds
+  --version             just show the version and quit (shorthand: -v)
 ```
 
 ### signals
 
 ```
-	SUGUSR1         increment backlight level (0 .. 3) rotating
-	SIGUSR2         dump variables/states (NYI)
+    SUGUSR1         increment backlight level (0 .. 3) rotating
+    SIGUSR2         dump variables/states (NYI)
 ```
