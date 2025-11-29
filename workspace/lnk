@@ -1,0 +1,41 @@
+#!/bin/bash
+
+LINKERARGS="$*"
+LARGS=""
+
+if [ ! -e lnk-buildno.c ] ; then
+	echo "// 1" > lnk-buildno.c
+	echo "const int buildno = 1;" >> lnk-buildno.c
+fi
+
+NEWER=0
+BFPATH=""
+
+while [ "$1"x != ""x ] ; do
+	if [[ $1 == *.o ]] ; then
+		if [ $1 -nt lnk-buildno ] ; then
+			# echo "find newer one: " $1
+			NEWER=1
+			if [ "$BFPATH"x == ""x ] ; then
+				BFPATH=$(dirname $1)
+			fi
+		fi
+	fi
+
+	shift
+done
+
+if [ $NEWER -ne 0 ] ; then
+	echo have to increment
+
+	BN=$(expr $( cat lnk-buildno.c | grep "//" | sed "s/\/\///" ) + 1)
+	echo "// $BN" > lnk-buildno.c
+	echo "const int buildno = $BN;" >> lnk-buildno.c
+	echo "const char *builddt = \""` date `\"";" >> lnk-buildno.c
+
+	echo $BFPATH "-" $BN
+	cc -c -o ${BFPATH}/lnk-buildno.o lnk-buildno.c
+fi
+
+g++ ${LINKERARGS} ${BFPATH}/lnk-buildno.o
+
