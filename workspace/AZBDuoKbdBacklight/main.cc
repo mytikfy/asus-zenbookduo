@@ -7,6 +7,7 @@
 #include <signal.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <time.h>
 
 #include <libusb-1.0/libusb.h>
 
@@ -275,8 +276,10 @@ static int checkPogo(const char *card)
 	return -1;
 }
 
-static int worker(long timeout)
+static int worker(long timeout, long timetics)
 {
+	printf("running worker\n");
+
 	if (!libusb_has_capability(LIBUSB_CAP_HAS_HOTPLUG)) {
 		printf("no hotplug support\n");
 	}
@@ -298,7 +301,7 @@ static int worker(long timeout)
 			LIBUSB_HOTPLUG_MATCH_ANY, cb, (void *)&cbData, &hdl);
 
 	if (retv) {
-		printf("libusb_init_context failed : %d\n", retv);
+		printf("libusb_hotplug_register_call failed : %d\n", retv);
 		exit(1);
 	}
 
@@ -317,6 +320,8 @@ static int worker(long timeout)
 
 	if (!bt.open()) {
 	}
+
+	time_t startTime = time(0);
 
 	for (;;)  {
 		retv = libusb_handle_events_timeout_completed(ctx, &tv, &completed);
@@ -378,9 +383,19 @@ static int worker(long timeout)
 				lastDpms = dpms;
 			}
 		}
+
+		if (timetics != 0) {
+			printf("timetics : %d\n", (int)(time(0) - startTime));
+			if ((time(0) - startTime) > timetics) {
+				break;
+			}
+		}
 	}
 
 	bt.close();
+
+	libusb_exit(ctx);
+	ctx = nullptr;
 
 	return 0;
 }
@@ -405,6 +420,7 @@ int main(int argc, char** argv)
 {
 	bool daemon = false;
 	long timeout = 1000;
+	long timetics = 0;
 
 	for (int i = 1; i < argc; i++) {
 		if (!strncmp("--level", argv[i], 7)) {
@@ -418,6 +434,16 @@ int main(int argc, char** argv)
 		else if (!strncmp("--daemon", argv[i], 8)) {
 			daemon = true;
 		}
+		else if (!strncmp("--timetics", argv[i], 10)) {
+			i++;
+
+			if ((i >= argc) || (argv[i][0] == '-')) {
+				fprintf(stderr, "missing parameter for timetics\n");
+				exit(1);
+			}
+
+			timetics = ::atol(argv[i]);
+		}
 		else if (!strncmp("--timeout", argv[i], 9)) {
 			i++;
 
@@ -429,7 +455,7 @@ int main(int argc, char** argv)
 			timeout = ::atol(argv[i]);
 		}
 		else if ((!strncmp("--version", argv[i], 9)) || (!strncmp("-v", argv[i], 2))) {
-			printf("version : %d,%d\n", version, revision);
+			printf("version : %d.%d.%d-%d\n", version, revision, subrevision, buildno);
 			return 0;
 		}
 	}
@@ -456,5 +482,5 @@ int main(int argc, char** argv)
 		}
 	}
 
-	return worker(timeout);
+	return worker(timeout, timetics);
 }

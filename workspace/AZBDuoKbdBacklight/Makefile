@@ -45,9 +45,11 @@
 
 
 # Environment 
-MKDIR=mkdir
+MKDIR=@mkdir
 CP=cp
 CCADMIN=CCadmin
+CXX=@echo "compiling $<" && g++
+RM=@rm -f
 
 # build
 build: .build-post

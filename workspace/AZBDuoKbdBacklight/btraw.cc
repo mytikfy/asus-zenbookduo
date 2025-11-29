@@ -183,9 +183,9 @@ int BtRaw::list()
         return 1;
     }
 
-	g_free(result);
-
 	rprint(result, 0);
+
+	g_free(result);
 
 	return 0;
 }
@@ -303,6 +303,9 @@ int BtRaw::collect(bool refresh)
 					*cout(cflags) << std::setw(4) << __LINE__ << std::setw(4 + indent) << g_variant_n_children(c3) << " " << (ptr = g_variant_print(c3, false)) << std::endl;
 					g_free(ptr);
 
+					g_variant_unref(c2);
+					c2 = nullptr;
+
 					GVariant *c4 = g_variant_get_child_value(c3, 0);
 					*cout(cflags) << std::setw(4) << __LINE__ << std::setw(4 + indent) << 0 << " " << (ptr = g_variant_print(c4, false)) << std::endl;
 					g_free(ptr);
@@ -310,6 +313,7 @@ int BtRaw::collect(bool refresh)
 					GString c4s;
 					g_variant_get(c4, "s", &c4s);
 					g_variant_unref(c4);
+					c4 = nullptr;
 
 					indent += 2;
 
@@ -416,9 +420,15 @@ int BtRaw::collect(bool refresh)
 							GString s1;
 						 	g_variant_get(c4a2, "s", &s1);
 
+							g_variant_unref(c4a2);
+							c4a2 = nullptr;
+
 							GVariant *c4a3 = g_variant_get_child_value(c4a1, 1);
 							*cout(cflags) << std::setw(4) << __LINE__ << std::setw(4 + indent) << 0 << " " << (ptr = g_variant_print(c4a3, false)) << std::endl;
 							g_free(ptr);
+
+							g_variant_unref(c4a1); // checked
+							c4a1 = nullptr;
 
 							do {
 								if (assignUInt16Value(s1, c4a3, "Handle", handle)) {
@@ -436,9 +446,14 @@ int BtRaw::collect(bool refresh)
 
 							free_gstring(s1);
 
+							g_variant_unref(c4a3);
+							c4a3 = nullptr;
+
 							indent -= 2;
 						}
 
+						g_variant_unref(c4a);
+						c4a = nullptr;
 
 						indent -= 2;
 
@@ -477,6 +492,7 @@ int BtRaw::collect(bool refresh)
 
 						for (gsize iii = 0; iii <  g_variant_n_children(c4a); iii++) {
 							GVariant *c4a1 = g_variant_get_child_value(c4a, iii);
+
 							*cout(cflags) << std::setw(4) << __LINE__ << std::setw(4 + indent) << g_variant_n_children(c4a1) << " " << (ptr = g_variant_print(c4a1, false)) << std::endl;
 							g_free(ptr);
 
@@ -488,9 +504,15 @@ int BtRaw::collect(bool refresh)
 							GString s1;
 						 	g_variant_get(c4a2, "s", &s1);
 
+							g_variant_unref(c4a2);
+							c4a2 = nullptr;
+
 							GVariant *c4a3 = g_variant_get_child_value(c4a1, 1);
 							*cout(cflags) << std::setw(4) << __LINE__ << std::setw(4 + indent) << 0 << " " << (ptr = g_variant_print(c4a3, false)) << std::endl;
 							g_free(ptr);
+
+							g_variant_unref(c4a1);
+							c4a1 = nullptr;
 
 							indent -= 2;
 
@@ -509,7 +531,13 @@ int BtRaw::collect(bool refresh)
 							} while(false);
 
 							free_gstring(s1);
+
+							g_variant_unref(c4a3);
+							c4a3 = nullptr;
 						}
+
+						g_variant_unref(c4a);
+						c4a = nullptr;
 
 						indent -= 2;
 
@@ -637,7 +665,8 @@ int BtRaw::collect(bool refresh)
 		g_variant_unref(c);
 	}
 
-	g_variant_unref(result);
+//	g_variant_unref(result);
+	g_free(result);
 	result = nullptr;
 
 	return 0;
