@@ -44,9 +44,9 @@ OBJECTFILES= \
 CFLAGS=-m64 `pkg-config --cflags glib-2.0` -W -Wshadow -Wall 
 
 # CC Compiler Flags
-CCFLAGS=-m64 `pkg-config --cflags glib-2.0` `pkg-config --cflags dbus-1` -W -Wshadow -Wall -Wextra -ffunction-sections -fdata-sections -fsanitize=undefined -Wsuggest-override
+CCFLAGS=-m64 `pkg-config --cflags glib-2.0` `pkg-config --cflags dbus-1` -W -Wshadow -Wall -Wextra -ffunction-sections -fdata-sections  -Wsuggest-override
  
-CXXFLAGS=-m64 `pkg-config --cflags glib-2.0` `pkg-config --cflags dbus-1` -W -Wshadow -Wall -Wextra -ffunction-sections -fdata-sections -fsanitize=undefined -Wsuggest-override
+CXXFLAGS=-m64 `pkg-config --cflags glib-2.0` `pkg-config --cflags dbus-1` -W -Wshadow -Wall -Wextra -ffunction-sections -fdata-sections  -Wsuggest-override
  
 
 # Fortran Compiler Flags
@@ -64,7 +64,7 @@ LDLIBSOPTIONS=`pkg-config --libs libusb-1.0` `pkg-config --libs glib-2.0` `pkg-c
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/azbduokbdbacklight: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/azbduokbdbacklight ${OBJECTFILES} ${LDLIBSOPTIONS} -ffunction-sections -fdata-sections -fsanitize=undefined -s
+	../lnk -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/azbduokbdbacklight ${OBJECTFILES} ${LDLIBSOPTIONS} -ffunction-sections -fdata-sections -s
 
 ${OBJECTDIR}/azbduobt.o: azbduobt.cc nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} -p ${OBJECTDIR}

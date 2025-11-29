@@ -64,7 +64,7 @@ LDLIBSOPTIONS=`pkg-config --libs libusb-1.0` `pkg-config --libs glib-2.0` `pkg-c
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/azbduokbdbacklight: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/azbduokbdbacklight ${OBJECTFILES} ${LDLIBSOPTIONS} -ffunction-sections -fdata-sections -fsanitize=undefined
+	../lnk -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/azbduokbdbacklight ${OBJECTFILES} ${LDLIBSOPTIONS} -ffunction-sections -fdata-sections -fsanitize=undefined
 
 ${OBJECTDIR}/azbduobt.o: azbduobt.cc nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} -p ${OBJECTDIR}
